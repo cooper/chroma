@@ -55,7 +55,7 @@ var Quiki = internal.Register(MustNewLexer(
 		// rules inside a map{} or map-based block
 		"map": {
 			Include("block"),
-			{`:`, Punctuation, Push("value")},
+			{`(?<!\\):`, Punctuation, Push("value")}, // enter keyed value
 		},
 
 		// rules inside a list{} or list-based block
@@ -74,8 +74,9 @@ var Quiki = internal.Register(MustNewLexer(
 
 		// rules inside a text formatting token
 		"formatted-text": {
-			{`\[`, Punctuation, Push()}, // increase format level with [
-			{`\]`, Punctuation, Pop(1)}, // decrease format level with ]
+			{`\[`, Punctuation, Push()},          // increase format level with [
+			{`\]`, Punctuation, Pop(1)},          // decrease format level with ]
+			{`@[\w]+[\w/.]*`, NameVariable, nil}, // variable
 		},
 	},
 ))
