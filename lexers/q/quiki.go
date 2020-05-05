@@ -14,6 +14,14 @@ var Quiki = internal.Register(MustNewLexer(
 		DotAll:    true,
 	},
 	Rules{
-		"root": {},
+		"root": {
+			{`/\*`, CommentMultiline, Push("nested-comment")},
+		},
+		"nested-comment": {
+			{`\*/`, CommentMultiline, Pop(1)},
+			{`/\*`, CommentMultiline, Push()},
+			{`[^*/]+`, CommentMultiline, nil},
+			{`[*/]`, CommentMultiline, nil},
+		},
 	},
 ))
