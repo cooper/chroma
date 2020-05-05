@@ -66,9 +66,16 @@ var Quiki = internal.Register(MustNewLexer(
 
 		// rules inside a map or list value
 		"value": {
-			{`(?<!\\);`, Punctuation, Pop(1)}, // exit the value with unescaped semicolon
-			{`(?<!\\)}`, Punctuation, Pop(2)}, // exit the value AND block with unescaped closing brace
-			{`.+?`, String, nil},              // content in the value
+			{`(?<!\\);`, Punctuation, Pop(1)},           // exit value with ;
+			{`(?<!\\)}`, Punctuation, Pop(2)},           // exit value AND block with }
+			{`\[`, Punctuation, Push("formatted-text")}, // enter formatted text with [
+			{`.+?`, String, nil},                        // content in the value
+		},
+
+		// rules inside a text formatting token
+		"formatted-text": {
+			{`\[`, Punctuation, Push()}, // increase format level with [
+			{`\]`, Punctuation, Pop(1)}, // decrease format level with ]
 		},
 	},
 ))
