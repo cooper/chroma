@@ -22,10 +22,10 @@ var Quiki = internal.Register(MustNewLexer(
 			{`/\*`, CommentMultiline, Push("nested-comment")},
 
 			// start a map{} or map-based block
-			{`(map)(\s*)(\{)`, ByGroups(NameFunction, Text, Punctuation), Push("map")},
+			{`(map|infobox|infosec|history|style|imagebox|image|model|toc|gallery)(\s*)(\{)`, ByGroups(NameFunction, Text, Punctuation), Push("map")},
 
 			// start a list{} or list-based block
-			{`(list)(\s*)(\{)`, ByGroups(NameFunction, Text, Punctuation), Push("list")},
+			{`(list|numlist)(\s*)(\{)`, ByGroups(NameFunction, Text, Punctuation), Push("list")},
 
 			// start a generic block
 			{`([\w\-\$\.]+)(\s*)(\{)`, ByGroups(NameFunction, Text, Punctuation), Push("block")},
